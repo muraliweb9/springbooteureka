@@ -7,9 +7,44 @@ spring:
         url: http://localhost:8100
 server:
   port: 8761
+  error:
+    # e.g. when an 500 error is displayed will have the underlying error message
+    include-message: always
+logging:
+  file:
+    name: eureka-app.log
+    max-history: 5
+    max-size: 10MB
+management:
+  endpoint:
+    env:
+      # show the values in actuator/env endpoint
+      # e.g. http://localhost:8761/actuator/env
+      show-values: ALWAYS
+    configprops:
+      # show the values in actuator/configprops endpoint
+      # e.g. http://localhost:8761/actuator/configprops
+      show-values: ALWAYS
+    health:
+      # Note show-details
+      show-details: ALWAYS
+    shutdown:
+      enabled: true
+  endpoints:
+    env:
+      # mask these values in actuator/env endpoint
+      keys-to-sanitize: password,secret
+    configprops:
+      # mask these values in actuator/configprops endpoint
+      keys-to-sanitize: password,secret
+    web:
+      exposure:
+        include: "*"
 eureka:
   client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
     # Don't register the inbuilt client to server
-    # Don't register yourself to server
+    # Don't register yourself to eureka server
     registerWithEureka: false
     fetchRegistry: false
